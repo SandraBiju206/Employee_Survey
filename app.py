@@ -12,10 +12,11 @@ IST = timezone(timedelta(hours=5, minutes=30))
 
 def get_db_connection():
     return mysql.connector.connect(
-        host=os.getenv('DB_HOST'),
-        user=os.getenv('DB_USER'),
-        password=os.getenv('DB_PASSWORD'),
-        database=os.getenv('DB_NAME')
+        host='kodama.proxy.rlwy.net',
+        user='root',
+        password='XQPKbHXkxyhHWCdnfSaPZTkoFFdxeiQH',
+        database='railway',
+        port=58892
     )
 @app.route('/')
 def home():
