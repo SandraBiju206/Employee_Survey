@@ -1,0 +1,97 @@
+body {
+    text-align: center;
+    background-color: rgb(235, 249, 253);
+    margin-top: 50px;
+    font-family: Arial, sans-serif;
+}
+
+form {
+    background-color: white;
+    width: 400px;
+    margin: auto;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+#form1 {
+    width: 700px;
+}
+
+/* =========================================================================
+   CHANGED SECTION: SPLIT THE GLOBAL INPUT RULE TO FIX SURVEY ALIGNMENT
+   ========================================================================= */
+/* This rule keeps your Name & Email text inputs exactly as they were */
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* This brand new rule fixes the survey radio dots so they line up perfectly */
+input[type="radio"] {
+    width: auto;             /* Stops the button from stretching to 80% */
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: 10px;      /* Pushes the text slightly away from the dot */
+    vertical-align: middle;  /* Perfectly vertical aligns the dot with text */
+}
+/* ========================================================================= */
+
+button {
+    width: 90%;
+    padding: 12px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: darkblue;
+    cursor: pointer;
+}
+
+.div1 {
+    text-align: left;
+}
+
+.label1 {
+    display: block;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 90%;
+    margin: auto;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+th {
+    background-color: blue;
+    color: white;
+    padding: 12px;
+}
+
+td {
+    padding: 12px;
+    border: 1px solid #ccc;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.chart-container {
+    width: 500px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.question {
+    text-align: left;
+    margin-bottom: 20px;
+}

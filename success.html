@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Success</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-box {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 {
+            color: #10b981; /* Success Green color */
+            margin-bottom: 8px;
+        }
+        p {
+            color: #0f172a;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .nav-btn {
+            display: block;
+            padding: 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .primary-btn {
+            background-color: #2563eb; /* Blue button */
+            color: white;
+        }
+        .primary-btn:hover {
+            background-color: #1d4ed8;
+        }
+        .secondary-btn {
+            background-color: #e2e8f0; /* Soft grey button */
+            color: #475569;
+        }
+        .secondary-btn:hover {
+            background-color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Survey Submitted Successfully!</h2>
+    
+    <p>Thank You, <b>{{ username }}</b></p>
+    
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 20px;">
+
+    <div class="btn-container">
+        <a href="/" class="nav-btn primary-btn">
+            Home
+        </a>
+        
+        <a href="/admin" class="nav-btn secondary-btn">
+         Go to Admin Portal
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

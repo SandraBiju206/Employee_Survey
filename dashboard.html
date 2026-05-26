@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Performance Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary-blue: #2563eb;
+            --accent-green: #10b981;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .header {
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .grey-btn {
+            background-color: var(--text-muted);
+        }
+
+        .grey-btn:hover {
+            background-color: #475569;
+        }
+
+        .blue-btn {
+            background-color: var(--primary-blue);
+        }
+
+        .blue-btn:hover {
+            background-color: var(--hover-blue);
+        }
+
+        .section-title {
+            margin: 40px 0 20px 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .chart-wrapper {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-chart-inner {
+            position: relative;
+            width: 100%;
+            overflow-y: auto; 
+            max-height: 60vh; 
+        }
+
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 20px;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-card h4 {
+            margin: 0 0 15px 0;
+            font-size: 15px;
+        }
+
+        .q-chart-container {
+            position: relative;
+            height: 270px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <div class="header">
+            <h2>Survey Results Dashboard</h2>
+            
+            <div class="btn-group">
+                <a href="/" class="nav-btn blue-btn">Back to Employee Survey</a>
+                <a href="/admin" class="nav-btn grey-btn">← Back to Table View</a>
+            </div>
+        </div>
+        <div class="section-title">Employee Leaderboard</div>
+        <div class="chart-wrapper">
+            <div class="main-chart-inner" id="innerContainer">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+        <div class="questions-grid">
+            <div class="question-card">
+                <h4>1. How satisfied are you with your job?</h4>
+                <div class="q-chart-container"><canvas id="q1Chart"></canvas></div>
+            </div>
+            <div class="question-card">
+                <h4>2. How is your work environment?</h4>
+                <div class="q-chart-container"><canvas id="q2Chart"></canvas></div>
+            </div>
+            <div class="question-card">
+                <h4>3. How supportive is your team?</h4>
+                <div class="q-chart-container"><canvas id="q3Chart"></canvas></div>
+            </div>
+            <div class="question-card">
+                <h4>4. Is your workload manageable?</h4>
+                <div class="q-chart-container"><canvas id="q4Chart"></canvas></div>
+            </div>
+            <div class="question-card">
+                <h4>5. Do you have growth opportunities?</h4>
+                <div class="q-chart-container"><canvas id="q5Chart"></canvas></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const labels = JSON.parse('{{ labels | tojson | safe }}');
+        const scores = JSON.parse('{{ scores | tojson | safe }}');
+        const qStats = JSON.parse('{{ q_stats | tojson | safe }}');
+       // =========================================================
+        // 📈 CHART 1: MAIN LEADERBOARD (CORRECTED VIEW)
+        // =========================================================
+        const innerContainer = document.getElementById('innerContainer');
+        const calculatedHeight = Math.max(400, labels.length * 40); 
+        innerContainer.style.height = calculatedHeight + 'px';
+
+        new Chart(document.getElementById('myChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Combined Points',
+                    data: scores,
+                    backgroundColor: '#2563eb', 
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        ticks: {
+                            autoSkip: false // ◄ FORCES EVERY SINGLE NAME TO DISPLAY
+                        }
+                    }
+                }
+            }
+        });
+        function buildBreakdownChart(canvasId, numericalValues, categoryLabels) {
+            new Chart(document.getElementById(canvasId), {
+                type: 'bar',
+                data: {
+                    labels: categoryLabels,
+                    datasets: [{
+                        label: 'Total Votes',
+                        data: numericalValues,
+                        backgroundColor: '#10b981', 
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        },
+                        x: {
+                            ticks: { font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+        buildBreakdownChart('q1Chart', qStats.q1, ['Very Dissatisfied', 'Dissatisfied', 'Neutral', 'Satisfied', 'Very Satisfied']);
+        buildBreakdownChart('q2Chart', qStats.q2, ['Very Poor', 'Poor', 'Average', 'Good', 'Excellent']);
+        buildBreakdownChart('q3Chart', qStats.q3, ['Very Unsupportive', 'Unsupportive', 'Neutral', 'Supportive', 'Very Supportive']);
+        buildBreakdownChart('q4Chart', qStats.q4, ['Overloaded', 'Heavy', 'Moderate', 'Manageable', 'Easy']);
+        buildBreakdownChart('q5Chart', qStats.q5, ['No Growth', 'Limited', 'Average', 'Good', 'Excellent']);
+    </script>
+
+</body>
+</html>

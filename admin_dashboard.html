@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .filter-box {
+            width: 90%;
+            margin: 20px auto;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .filter-box input[type="date"] {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            width: auto;
+            margin: 0;
+        }
+        .filter-box button {
+            width: auto;
+            padding: 8px 20px;
+            font-size: 14px;
+            border-radius: 6px;
+        }
+        .clear-btn {
+            background-color: #64748b;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .clear-btn:hover {
+            background-color: #475569;
+        }
+        .dashboard-btn {
+            width: 200px;
+            margin: 0 auto 10px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Employee Survey Report</h2>
+
+<a href="/dashboard">
+    <button class="dashboard-btn">Dashboard</button>
+</a>
+
+<br>
+
+<!-- DATE RANGE FILTER -->
+<form method="post" action="/filter" class="filter-box">
+    <input type="date" name="start_date" value="{{ start_date }}">
+    <span><b>to</b></span>
+    <input type="date" name="end_date" value="{{ end_date }}">
+    <button type="submit">Filter</button>
+    <a href="/filter_clear" class="clear-btn">Clear</a>
+</form>
+
+{% if data %}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Q1</th>
+        <th>Q2</th>
+        <th>Q3</th>
+        <th>Q4</th>
+        <th>Q5</th>
+        <th>Total Score</th>
+        <th>Submitted At</th>
+    </tr>
+    {% for row in data %}
+    <tr>
+        <td>{{ row.id }}</td>
+        <td>{{ row.username }}</td>
+        <td>{{ row.email }}</td>
+        <td>{{ row.q1 }}</td>
+        <td>{{ row.q2 }}</td>
+        <td>{{ row.q3 }}</td>
+        <td>{{ row.q4 }}</td>
+        <td>{{ row.q5 }}</td>
+        <td>{{ row.score }}</td>
+        <td>{{ row.submission_time }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p style="text-align:center; color:red; font-size:16px; font-weight:bold; margin-top:30px;">
+    No Data Found
+</p>
+{% endif %}
+
+</body>
+</html>
